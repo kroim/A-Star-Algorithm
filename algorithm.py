@@ -6,6 +6,7 @@ class Maze:
         self.file = file
         self.data = []
         self.create_maze_array()
+        self.print_maze()
 
     def create_maze_array(self):
         file = open(self.file, 'r')
@@ -16,6 +17,14 @@ class Maze:
             maze_array.append(items)
         self.data = maze_array
 
+    def print_maze(self):
+        print("--------------------- Matrix --------------------")
+        for index1, row in enumerate(self.data):
+            row_string = ""
+            for index2, item in enumerate(row):
+                row_string += item + "(" + str(index1) + ", " + str(index2) + ") "
+            print(row_string)
+
 
 class Graph:
     def __init__(self, maze_array, start, end):
@@ -25,6 +34,7 @@ class Graph:
         self.end_node = Node
         self.graph = nx.Graph()
         self.create_graph(start, end)
+        self.print_graph()
 
     def create_graph(self, start, end):
         graph = nx.Graph()
@@ -51,6 +61,17 @@ class Graph:
                     _left_index = r_index * len(row) + _left
                     graph.add_edge(_left_index, item_index, weight=self.weight)
         self.graph = graph
+
+    def print_graph(self):
+        print("--------------------- Graph ---------------------")
+        for node in self.graph.nodes:
+            edges = self.graph.edges(node)
+            if not len(edges):
+                continue
+            line_string = ""
+            for edge in edges:
+                line_string += str(self.graph.nodes[edge[0]]['pos']) + " --> " + str(self.graph.nodes[edge[1]]['pos']) + ", "
+            print(line_string[:-2])
 
 
 class Node:
@@ -81,8 +102,11 @@ class Algorithm:
             path.append(current)
             current = current.parent
         path = path[::-1]
+        print("--------------- A star search path --------------")
+        print_string = ""
         for p_item in path:
-            print(self.graph.nodes[p_item.node])
+            print_string += str(self.graph.nodes[p_item.node]) + " --> "
+        print(print_string[:-5])
 
     def get_children(self, item_node):
         res_nodes = []
