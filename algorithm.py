@@ -20,9 +20,14 @@ class Maze:
     def print_maze(self):
         print("--------------------- Matrix --------------------")
         for index1, row in enumerate(self.data):
-            row_string = ""
+            row_string = "["
             for index2, item in enumerate(row):
-                row_string += item + "(" + str(index1) + ", " + str(index2) + ") "
+                if not item == '0':
+                    row_string += "'" + item + "', "
+                else:
+                    row_string += "(" + str(index1) + ", " + str(index2) + ") "
+            row_string = row_string[:-2]
+            row_string += "]"
             print(row_string)
 
 
