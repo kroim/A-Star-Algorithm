@@ -137,12 +137,16 @@ class Algorithm:
         res_nodes = []
         connected_edges = self.graph.edges(item_node.node)
         for edge in connected_edges:
-            if edge[0] < item_node.node or edge[1] < item_node.node:
-                continue
-            if edge[0] > item_node.node:
+            if not edge[0] == item_node.node:
                 res_nodes.append(Node(item_node, edge[0], self.graph.nodes[edge[0]]['pos']))
-            elif edge[1] > item_node.node:
+            if not edge[1] == item_node.node:
                 res_nodes.append(Node(item_node, edge[1], self.graph.nodes[edge[1]]['pos']))
+            # if edge[0] < item_node.node or edge[1] < item_node.node:
+            #     continue
+            # if edge[0] > item_node.node:
+            #     res_nodes.append(Node(item_node, edge[0], self.graph.nodes[edge[0]]['pos']))
+            # elif edge[1] > item_node.node:
+            #     res_nodes.append(Node(item_node, edge[1], self.graph.nodes[edge[1]]['pos']))
         return res_nodes
 
     def search(self):
@@ -196,6 +200,6 @@ class Algorithm:
 
 
 if __name__ == '__main__':
-    M = Maze('input1.txt')
+    M = Maze('input2.txt')
     G = Graph(M.data, '3', '2')
     A = Algorithm(G)
