@@ -18,14 +18,20 @@ class Maze:
         self.data = maze_array
 
     def print_maze(self):
-        print("--------------------- Matrix --------------------")
+        print("--------------------- Input Matrix -------------------")
+        for row in self.data:
+            r_str = ""
+            for col in row:
+                r_str += str(col) + " "
+            print(r_str[:-1])
+        print("--------------------- Maze Matrix --------------------")
         for index1, row in enumerate(self.data):
             row_string = "["
             for index2, item in enumerate(row):
                 if not item == '0':
                     row_string += "'" + item + "', "
                 else:
-                    row_string += "(" + str(index1) + ", " + str(index2) + ") "
+                    row_string += "(" + str(index1) + ", " + str(index2) + "), "
             row_string = row_string[:-2]
             row_string += "]"
             print(row_string)
@@ -35,8 +41,8 @@ class Graph:
     def __init__(self, maze_array, start, end):
         self.maze_array = maze_array
         self.weight = 1
-        self.start_node = Node
-        self.end_node = Node
+        self.start_node = None
+        self.end_node = None
         self.graph = nx.Graph()
         self.create_graph(start, end)
         self.print_graph()
@@ -71,11 +77,17 @@ class Graph:
         print("--------------------- Graph ---------------------")
         for node in self.graph.nodes:
             edges = self.graph.edges(node)
-            if not len(edges):
+            if len(edges) == 0:
                 continue
             line_string = ""
-            for edge in edges:
-                line_string += str(self.graph.nodes[edge[0]]['pos']) + " --> " + str(self.graph.nodes[edge[1]]['pos']) + ", "
+            for index, edge in enumerate(edges):
+                if index == 0:
+                    if edge[0] == self.start_node:
+                        line_string += str(self.graph.nodes[edge[0]]['data']) + " --> " + str(self.graph.nodes[edge[1]]['pos']) + ", "
+                    else:
+                        line_string += str(self.graph.nodes[edge[0]]['pos']) + " --> " + str(self.graph.nodes[edge[1]]['pos']) + ", "
+                else:
+                    line_string += str(self.graph.nodes[edge[1]]['pos']) + ", "
             print(line_string[:-2])
 
 
@@ -109,8 +121,12 @@ class Algorithm:
         path = path[::-1]
         print("--------------- A star search path --------------")
         print_string = ""
-        for p_item in path:
-            print_string += str(self.graph.nodes[p_item.node]) + " --> "
+        for i in range(len(path)):
+            p_item = path[i]
+            if i == 0:
+                print_string += str(self.graph.nodes[p_item.node]['data']) + " --> "
+            else:
+                print_string += str(self.graph.nodes[p_item.node]['pos']) + " --> "
         print(print_string[:-5])
 
     def get_children(self, item_node):
