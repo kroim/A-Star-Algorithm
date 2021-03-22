@@ -18,22 +18,26 @@ class Maze:
         self.data = maze_array
 
     def print_maze(self):
-        print("--------------------- Input Matrix -------------------")
-        for row in self.data:
-            r_str = ""
-            for col in row:
-                r_str += str(col) + " "
-            print(r_str[:-1])
-        print("--------------------- Maze Matrix --------------------")
+        print("--------------------- Matrix --------------------")
         for index1, row in enumerate(self.data):
-            row_string = "["
+            row_string = ""
+            prv_str = ""
             for index2, item in enumerate(row):
                 if not item == '0':
-                    row_string += "'" + item + "', "
+                    if prv_str == "" or prv_str == '1':
+                        row_string += item + "       "
+                    else:
+                        row_string += "   " + item + "       "
+                    prv_str = '1'
                 else:
-                    row_string += "(" + str(index1) + ", " + str(index2) + "), "
+                    if prv_str == "" or prv_str == 'tuple':
+                        row_string += "(" + str(index1) + ", " + str(index2) + ")  "
+                    else:
+                        row_string = row_string[:-3]
+                        row_string += "(" + str(index1) + ", " + str(index2) + ")  "
+                    prv_str = 'tuple'
             row_string = row_string[:-2]
-            row_string += "]"
+            row_string += ""
             print(row_string)
 
 
@@ -82,7 +86,7 @@ class Graph:
             line_string = ""
             for index, edge in enumerate(edges):
                 if index == 0:
-                    if edge[0] == self.start_node:
+                    if edge[0] == self.start_node or edge[0] == self.end_node:
                         line_string += str(self.graph.nodes[edge[0]]['data']) + " --> " + str(self.graph.nodes[edge[1]]['pos']) + ", "
                     else:
                         line_string += str(self.graph.nodes[edge[0]]['pos']) + " --> " + str(self.graph.nodes[edge[1]]['pos']) + ", "
@@ -123,7 +127,7 @@ class Algorithm:
         print_string = ""
         for i in range(len(path)):
             p_item = path[i]
-            if i == 0:
+            if i == 0 or i == len(path) - 1:
                 print_string += str(self.graph.nodes[p_item.node]['data']) + " --> "
             else:
                 print_string += str(self.graph.nodes[p_item.node]['pos']) + " --> "
