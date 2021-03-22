@@ -181,7 +181,6 @@ class Algorithm:
             if current_node == end_node:
                 return self.return_path(current_node)
             children = self.get_children(current_node)
-
             # Loop through children
             for child in children:
                 # Child is on the visited list (search entire visited list)
@@ -191,7 +190,8 @@ class Algorithm:
                 # Create the f, g, and h values
                 child.g = current_node.g + self.G.weight
                 # select one child from eucledian distance
-                child.h = (((child.pos[0] - end_node.pos[0]) ** 2) + ((child.pos[1] - end_node.pos[1]) ** 2))
+                # child.h = (((child.pos[0] - end_node.pos[0]) ** 2) + ((child.pos[1] - end_node.pos[1]) ** 2))
+                child.h = abs(child.pos[0] - end_node.pos[0]) + abs(child.pos[1] - end_node.pos[1])
                 child.f = child.g + child.h
                 # Child is already in the open_list and g cost is already lower
                 if len([i for i in open_list if child == i and child.g > i.g]) > 0:
@@ -200,6 +200,6 @@ class Algorithm:
 
 
 if __name__ == '__main__':
-    M = Maze('input2.txt')
+    M = Maze('input1.txt')
     G = Graph(M.data, '3', '2')
     A = Algorithm(G)
