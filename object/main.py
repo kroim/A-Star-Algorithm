@@ -1,16 +1,14 @@
-
 # constructs a triangulation on the polygon world and forms a graph of the paths
 
-import matplotlib.pyplot as plt
-import descartes
 import cv2
+import descartes
+import matplotlib.pyplot as plt
+import networkx as nx
 import numpy as np
 import triangle as tr
-import networkx as nx
-
 from environment import scenario
-from simulation import plot_endpoints
 from shapely.ops import unary_union
+from simulation import plot_endpoints
 
 if __name__ == '__main__':
 
@@ -196,5 +194,3 @@ plt.subplot(121)
 nx.draw(G, with_labels=True, font_weight='bold')
 
 plt.show()
-
-
