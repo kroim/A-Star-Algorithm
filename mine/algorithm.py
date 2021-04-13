@@ -155,7 +155,7 @@ class Algorithm:
     def search(self):
         start_node = Node(None, self.start_node, self.graph.nodes[self.start_node]['pos'])
         start_node.g = start_node.h = start_node.f = 0
-        end_node = Node(None, self.start_node, self.graph.nodes[self.end_node]['pos'])
+        end_node = Node(None, self.end_node, self.graph.nodes[self.end_node]['pos'])
         end_node.g = end_node.h = end_node.f = 0
         open_list = []
         close_list = []

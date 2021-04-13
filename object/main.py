@@ -9,42 +9,42 @@ import triangle as tr
 from environment import scenario
 from shapely.ops import unary_union
 from simulation import plot_endpoints
+from AStarAlgorithm import AStarAlgorithm
 
-if __name__ == '__main__':
+xlen = 100
+ylen = 50
+size = (ylen, xlen)
+G = nx.Graph()
 
-    xlen = 100
-    ylen = 50
-    size = (ylen, xlen)
-    G = nx.Graph()
+###########################################################################
+# POLYGON WORLD
+###########################################################################
+polygons, start, goal = scenario('polyworld', size)
 
-    ###########################################################################
-    # POLYGON WORLD
-    ###########################################################################
-    polygons, start, goal = scenario('polyworld', size)
-    # combine overlapping polygons
-    polygons = unary_union(polygons)
-    start = list(start)
-    goal = list(goal)
+# combine overlapping polygons
+polygons = unary_union(polygons)
+start = list(start)
+goal = list(goal)
 
-    fig, ax = plt.subplots(1, 1)
+fig, ax = plt.subplots(1, 1)
 
-    for poly in polygons:
-        ax.add_patch(descartes.PolygonPatch(poly, fc='blue', alpha=0.5))
+for poly in polygons:
+    ax.add_patch(descartes.PolygonPatch(poly, fc='blue', alpha=0.5))
 
-    plot_endpoints(ax, start, goal)
+plot_endpoints(ax, start, goal)
 
-    fig.set_facecolor('white')
-    fig.set_edgecolor('white')
-    plt.axis('on')
-    # plt.savefig('polyworld.pdf', bbox_inches='tight', pad_inches=0, dpi=600, facecolor='white', edgecolor='white')
-    plt.show()
+fig.set_facecolor('white')
+fig.set_edgecolor('white')
+plt.axis('on')
+
+plt.show()
 
 fig.savefig('plot.png')
 img = cv2.imread('plot.png')
 
 holes = np.empty((len(polygons), 2), dtype=int)
 corners = np.empty((100, 2), dtype=int)
-f = 0;
+f = 0
 for k in range(len(polygons)):
     # store holes in array
     point = polygons[k].centroid
@@ -54,11 +54,11 @@ for k in range(len(polygons)):
     vertices = list(polygons[k].exterior.coords)
     vertices = np.array(tuple(tuple(map(int, x)) for x in vertices))
     for j in range(len(vertices) - 1):
-        c = vertices[j];
+        c = vertices[j]
         corners[f] = c
         f += 1
 
-    # add corners of environment boundaries
+# add corners of environment boundaries
 corners[f] = [0, 0]
 f += 1
 corners[f] = [xlen, 0]
@@ -108,10 +108,8 @@ tr.plot(plt.axes(), **t)
 plt.xlim(0, 100)
 plt.ylim(0, 50)
 
-# plt.show()
-
-triList = t['triangles'];
-corners = t['vertices'];
+triList = t['triangles']
+corners = t['vertices']
 nodes = {}
 triGraph = {}
 
@@ -134,11 +132,11 @@ for q in range(len(triList)):
     # find closest nodes to start and end
     temp = np.linalg.norm(np.array([goal[1], goal[0]]) - np.array([x, y]))
     if temp < gVal:
-        gVal = temp;
+        gVal = temp
         goalNodeIndex = q
     temp = np.linalg.norm(np.array(start) - np.array([x, y]))
     if temp < sVal:
-        sVal = temp;
+        sVal = temp
         startNodeIndex = q
 
 # if any of the previous nodes share 2 verticies
@@ -151,7 +149,7 @@ for d in range(len(nodes)):
         verta = triList[b][0]
         vertb = triList[b][1]
         vertc = triList[b][2]
-        count = 0;
+        count = 0
         if np.any([verta == vert1, verta == vert2, verta == vert3]):
             count += 1
         if np.any([vertb == vert1, vertb == vert2, vertb == vert3]):
@@ -164,7 +162,7 @@ for d in range(len(nodes)):
                 triGraph[d] = [*triGraph[d], b]
                 G.add_node(d)
             else:
-                triGraph[d] = [b];
+                triGraph[d] = [b]
                 G.add_node(d)
 
 # add start and end points
@@ -187,10 +185,9 @@ for u in triGraph:
 # add start and end point markers
 plt.plot(start[0], start[1], 'ro', markersize=12)
 plt.plot(goal[1], goal[0], 'ro', markersize=12)
-
 plt.show()
-
 plt.subplot(121)
 nx.draw(G, with_labels=True, font_weight='bold')
-
 plt.show()
+
+AStarAlgorithm(G, nodes)
