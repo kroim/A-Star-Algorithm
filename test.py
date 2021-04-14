@@ -1,14 +1,15 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import networkx as nx
 
-x = [1, 2, 3, 4, 5]
-y = [1, 2, 3, 4, 5]
+graph = nx.Graph()
+graph.add_node(1)
+graph.add_node(2)
+graph.add_node(3)
 
-fig, ax = plt.subplots(1, 1)
-for i in range(len(x)):
-    if i > 0:
-        plt.plot([x[i-1], x[i]], [y[i-1], y[i]], color='#000')
-for j in range(len(x)):
-    plt.scatter(x[j], y[j], s=100, edgecolors='#000', facecolor='#000')
-fig.show()
+graph.add_edge(1, 2, weight=1)
+graph.add_edge(2, 3, weight=5)
+graph.add_edge(3, 1, weight=7)
 
+print(graph.nodes)
+print(graph.edges[1, 3]['weight'])

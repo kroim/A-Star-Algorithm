@@ -17,14 +17,13 @@ class AStarAlgorithm:
         self.positions = positions
         self.start_node = len(graph.nodes) - 2
         self.end_node = len(graph.nodes) - 1
-        self.weight = 1
+        # self.display()
         self.search()
 
     def display(self):
         print(self.graph.nodes)
         print(self.start_node)
         print(self.end_node)
-        print(self.graph.edges)
 
     def return_path(self, item_node):
         path = []
@@ -92,7 +91,7 @@ class AStarAlgorithm:
                 if len([close_item for close_item in close_list if close_item == child]) > 0:
                     continue
                 # Create the f, g, and h values
-                child.g = current_node.g + self.weight
+                child.g = current_node.g + self.graph.edges[current_node.node, child.node]['weight']
                 child.h = abs(child.pos[0] - end_node.pos[0]) + abs(child.pos[1] - end_node.pos[1])
                 child.f = child.g + child.h
                 # Child is already in the open_list and g cost is already lower

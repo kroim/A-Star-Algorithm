@@ -189,5 +189,4 @@ plt.show()
 plt.subplot(121)
 nx.draw(G, with_labels=True, font_weight='bold')
 plt.show()
-
 AStarAlgorithm(G, nodes)
